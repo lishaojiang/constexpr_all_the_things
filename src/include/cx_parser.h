@@ -328,7 +328,12 @@ namespace parser
         const auto len = static_cast<std::string_view::size_type>(
             s.cend() - p.second);
         return parse_result_t<std::string_view>(
-            cx::make_pair(str, parse_input_t(p.second, len)));
+            #ifdef _MSC_VER
+                cx::make_pair(str, parse_input_t(p.second._Unwrapped(), len))
+            #else
+                cx::make_pair(str, parse_input_t(p.second, len))
+            #endif
+            );
       }
       return std::nullopt;
     };
